@@ -7,11 +7,13 @@ import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
+import session from "express-session";
+import passport from "./config/passportConfig.js";
 import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/Auth.js";
-import session from "express-session";
-import passport from "./config/passportConfig.js";
+import userRoutes from "./routes/users.js";
+
 
 // Configrations
 const __filename = fileURLToPath(import.meta.url);
@@ -60,8 +62,10 @@ mongoose.connect("mongodb://127.0.0.1:27017/social-media-app", { useNewUrlParser
    });
 
 
-//    Routes 
+//    Routes login
 app.use("/auth", authRoutes);
+
+app.use("/users",userRoutes);
 
 
 
