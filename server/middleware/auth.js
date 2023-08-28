@@ -1,10 +1,10 @@
-import { Jwt } from "jsonwebtoken";
+import session from "express-session";
 
-export const verifyToken = async function(req,res,next){
-    try{
-      let token = req.header("Auther")
-    }
-    catch(err){
-        res.status(500).json({error:err.message});
-    }
+
+export const verifyUser = async function(req,res,next){
+
+  if(req.isAuthenticated()){
+    return next();             //  User is authenticated, proceed to the next middleware
+  }
+  res.status(401).json({ message: "Unauthorized" }); // User is not authenticated
 }
