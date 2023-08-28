@@ -1,65 +1,93 @@
-import bcrypt from "bcrypt";
-import Jwt  from "jsonwebtoken";
-import User from "../model/User.js";
+import passport from "../config/passportConfig.js";
+import { User } from '../model/User.js';
 
 
-//  reister user
 
-export const register = async function(req,res){
-    try{
-        const{                  // Destructuring the req.body
+//  register user
+export const register = async function (req, res) {
+    try {
+        const {
             firstName,
             lastName,
             email,
-            password,
-            picturePath,
-            friends,
-            location,
-            occupation 
-        } = req.body;
-        
-        const salt = await bcrypt.genSalt();                  // 
-        const passwordHash = await bcrypt.hash(password,salt);
-
-        const newUser =new User ({
-            firstName,
-            lastName,
-            email,
-            password : passwordHash,
             picturePath,
             friends,
             location,
             occupation,
-            viewedProfiles : 100,
-            impressions : 290
+            password
+        } = req.body;
+
+        const newUser = new User({
+            firstName,
+            lastName,
+            email,
+            picturePath,
+            friends,
+            location,
+            occupation
         });
-        const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
-    }
-    catch(err){
-       res.status(500).json({error: err.message });
+
+
+        User.register(newUser, req.body.password, function (err, user) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            } else {
+                passport.authenticate("local")(req, res, function () {
+                    return res.status(201).json(user);
+                });
+            }
+
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }
 
 
 // login fucntion
-export const login = async function(req,res){
-    try{
-     const{email , password}  = req.body;
-     const user = await User.findOne({email : email });
+export const login = async function (req, res) {
+    try {
+        const {
+            firstName,
+            lastName,
+            email,
+            picturePath,
+            friends,
+            location,
+            occupation,
+            password
+        } = req.body;
 
-     if(!user) return res.status(400).json({msg : "user does not exist"});
+        const currUser = new User({
+            email,
+            password
+        });
+        req.login(currUser, function (err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).josn({ error: err.message });
+            }
+            else {
+                passport.authenticate("local")(req, res, function () {
+                    const response = {
+                        message: "Login successful",
+                        user: {
 
-     const isMatch = await bcrypt.compare(password,user.password);
+                            id: req.user._id,
+                            username: req.user.email,
+                            firstName: req.user.firstName,
+                            lastName: req.user.lastName,
+                            friends: req.user.friends,
+                            location: req.user.location,
+                            occupation: req.user.occupation,
 
-     if(!isMatch) return res.status(400).json({msg:"Invalid credentials"});
-
-     const token = Jwt.sign({id:user._id},process.env.JWT_SECRET );
-
-     delete user.password;
-
-    
-    }catch(err){ 
-          res.status(500).json({error : err.message});
+                        }
+                    };
+                    return res.status(201).json(response);
+                });
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 } 
