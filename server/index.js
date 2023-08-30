@@ -13,6 +13,9 @@ import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/Auth.js";
 import userRoutes from "./routes/users.js";
+import { verifyUser } from "./middleware/auth.js";
+import  {createPost} from './controllers/posts.js';
+import postsRoute from './routes/posts.js';
 
 
 // Configrations
@@ -50,8 +53,6 @@ app.use(session({              // set up session
 app.use(passport.initialize());
 app.use(passport.session());
 
-//    register route 
-app.post("/auth/register", upload.single("picture"), register);
 
 
 
@@ -62,10 +63,14 @@ mongoose.connect("mongodb://127.0.0.1:27017/social-media-app", { useNewUrlParser
    });
 
 
-//    Routes login
-app.use("/auth", authRoutes);
+   //    routes with files 
+app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts",verifyUser,upload.single("picture"),createPost);
 
+//    Routes 
+app.use("/auth", authRoutes);
 app.use("/users",userRoutes);
+app.use("/posts",postsRoute);
 
 
 

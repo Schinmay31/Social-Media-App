@@ -1,7 +1,7 @@
 import  express  from "express";
-import getFeedPosts from "../controllers/posts.js";
-import getUserPosts from "../controllers/posts.js";
-import likePost from "../controllers/posts.js";
+import {getFeedPosts} from "../controllers/posts.js";
+import {getUserPosts} from "../controllers/posts.js";
+import {likePost} from "../controllers/posts.js";
 
 import { verifyUser } from "../middleware/auth.js";
 
