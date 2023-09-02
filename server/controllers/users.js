@@ -34,6 +34,21 @@ export const getUserFriends = async function (req, res) {        // to find give
     }
 }
 
+export const getUserList = async function(req,res){
+    try{
+          const userList = await User.find();
+
+          const formattedList = userList.map(               // formatting the data into desired format
+            ({ _id, firstName, lastName}) => {
+                return {  _id,firstName, lastName };
+            }
+        );
+        return res.status(200).json(formattedList);
+
+    }catch(err){
+        return res.status(500).json({message : err.message});
+    }
+}
 
 
 // update 
