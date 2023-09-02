@@ -56,8 +56,8 @@ app.use(passport.session());
 
 
 
-
-mongoose.connect("mongodb://127.0.0.1:27017/social-media-app", { useNewUrlParser: true })
+const uri = "mongodb+srv://chinmay31:yS9a5odiFq3zI0aK@cluster0.n1orfgf.mongodb.net/?retryWrites=true&w=majority"
+mongoose.connect(uri, { useNewUrlParser: true })
    .then(() => {
       console.log("Database is Connected ")
    });
