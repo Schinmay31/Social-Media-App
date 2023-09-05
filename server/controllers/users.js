@@ -50,10 +50,24 @@ export const getUserList = async function(req,res){
     }
 }
 
+export const searchUser = async function(req,res){
+    try{
+    const {query} = req.query;
+
+    const users = await User.find({
+        userName : { $regex: `^${query}`}
+    }).limit(5);
+
+    return res.status(200).json(users);
+    }catch(err){
+        return res.status(500).json({message : err.message});
+    }
+}
+
 
 // update 
 
-export const addRemoveFriend = async function (req, res) {
+export const addRemoveFriend = async function (req, res) {           // followers and following system.
     try {
         const { id, friendId } = req.params;
         const user = await User.findById(id);
@@ -61,14 +75,14 @@ export const addRemoveFriend = async function (req, res) {
 
         if (user.friends.includes(friendId)) {            // if user.friends Array has id of friendID that means they are aleady frinds and one want remove other from friendslist -> (Remove Friend)
             user.friends = user.friends.filter(f => f !== friendId);
-            friend.friends = friend.friends.filter(f => f !== id);
+            // friend.friends = friend.friends.filter(f => f !== id);
         }
         else {                   // when one wants to add other to their friend List -> (Add Friend)
             user.friends.push(friendId);
-            friend.friends.push(id);
+            // friend.friends.push(id);
         }
         await user.save();
-        await friend.save();
+        // await friend.save();
 
         const friends = await Promise.all(
             user.friends.map((id) => User.findById(id))
