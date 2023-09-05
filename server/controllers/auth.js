@@ -7,6 +7,7 @@ import { User } from '../model/User.js';
 export const register = async function (req, res) {
     try {
         const {
+            userName,
             firstName,
             lastName,
             email,
@@ -18,6 +19,7 @@ export const register = async function (req, res) {
         } = req.body;
 
         const newUser = new User({
+            userName,
             firstName,
             lastName,
             email,
@@ -48,14 +50,8 @@ export const register = async function (req, res) {
 export const login = async function (req, res) {
     try {
         const {
-            firstName,
-            lastName,
-            email,
-            picturePath,
-            friends,
-            location,
-            occupation,
-            password
+        email,
+         password
         } = req.body;
 
         const currUser = new User({
