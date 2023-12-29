@@ -13,7 +13,7 @@ const router = express.Router();
 // read operations
 
 router.get("/:id",verifyUser,getUser); // get req to any user account.
-router.get("/",getUserList);  // get req to server for all users list.
+router.get("/",verifyUser,getUserList);  // get req to server for all users list.
 
 router.get("/:id/friends",verifyUser,getUserFriends); // get req to users friend-list.
 router.get("/search",searchUser);

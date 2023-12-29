@@ -1,18 +1,24 @@
 import { User } from "../model/User.js";
+import mongoose from "mongoose";
 
 // read functions
 
-export const getUser = async function (req, res) {               // to find given user
+export const getUser = async function (req, res) {
     try {
-        const { id } = req.params;
-        const user = await User.findById(id);
-        return res.status(200).json(user);
-    }
-    catch (err) {
-        return res.status(404).json({ message: err.message });
-    }
-}
+        const { id } = req.query;
+        console.log('Received user ID:', id);
 
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json(user);
+    } catch (err) {
+        return res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+};
 export const getUserFriends = async function (req, res) {        // to find given users friend list
     try {
         const { id } = req.params;
@@ -39,8 +45,8 @@ export const getUserList = async function(req,res){
           const userList = await User.find();
 
           const formattedList = userList.map(               // formatting the data into desired format
-            ({ _id, firstName, lastName}) => {
-                return {  _id,firstName, lastName };
+            ({ _id, userName}) => {
+                return {  _id,userName };
             }
         );
         return res.status(200).json(formattedList);

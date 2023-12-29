@@ -11,13 +11,13 @@ const userSchema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        required: true,
+        // required: true,
         min: 3,
         max: 50
     },
     lastName: {
         type: String,
-        required: true,
+        // required: true,
         min: 3,
         max: 50
     },
@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
 );
 
 userSchema.plugin(passportLocalMongoose, {
-    usernameField: 'email'        // Specifing  that the "email" field should be treated as the username
+    usernameField: 'userName'        // Specifing  that the "email" field should be treated as the username
 });
 
 export const User = mongoose.model('user', userSchema);

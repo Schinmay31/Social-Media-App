@@ -50,12 +50,12 @@ export const register = async function (req, res) {
 export const login = async function (req, res) {
     try {
         const {
-        email,
+        userName,
          password
         } = req.body;
 
         const currUser = new User({
-            email,
+            userName,
             password
         });
         req.login(currUser, function (err) {
