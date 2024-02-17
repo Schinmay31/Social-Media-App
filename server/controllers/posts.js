@@ -9,6 +9,7 @@ export const createPost = async function(req,res){
         const user = await User.findById(userId);
         const newPost = new Post({
             userId,
+            userName : user.userName,
             firstName : user.firstName,
             lastName : user.lastName,
             location : user.location,
@@ -53,27 +54,35 @@ export const getUserPosts = async function(req,res){
 
 // update 
 
-export const likePost = async function(req,res){
-    try{
-       const id = req.params;
-       const userId = req.body.userId;
-       const post = await Post.findById(id);
-       const isLiked = await Post.likes.get(userId);
-
-       if(isLiked){
+export const likePost = async function (req, res) {
+    try {
+      const id = req.params.id; // Extract the 'id' property from req.params
+      const userId = req.body.userId;
+  
+      // Check if the post with the specified ID exists
+      const post = await Post.findById(id);
+  
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+  
+      const isLiked = post.likes.get(userId);
+  
+      if (isLiked) {
         post.likes.delete(userId);
-       }
-       else{
-        post.likes.set(userId,true);
-       }
-
-       const updatePost = await Post.findByIdAndUpdate(
+      } else {
+        post.likes.set(userId, true);
+      }
+  
+      const updatePost = await Post.findByIdAndUpdate(
         id,
-        {likes:post.likes},
-        {new : true}
-       );
-       return res.status(100).json(updatePost);
-  }catch(err){
-      return res.status(404).json({message : err.message});
-  }
-}
+        { likes: post.likes },
+        { new: true }
+      );
+  
+      return res.status(200).json(updatePost);
+    } catch (err) {
+      return res.status(404).json({ message: err.message });
+    }
+  };
+  

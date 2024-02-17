@@ -78,13 +78,16 @@ export const addRemoveFriend = async function (req, res) {           // follower
         const { id, friendId } = req.params;
         const user = await User.findById(id);
         const friend = await User.findById(friendId);
+        let isFriend = false;
 
         if (user.friends.includes(friendId)) {            // if user.friends Array has id of friendID that means they are aleady frinds and one want remove other from friendslist -> (Remove Friend)
             user.friends = user.friends.filter(f => f !== friendId);
             // friend.friends = friend.friends.filter(f => f !== id);
+            isFriend = false;
         }
         else {                   // when one wants to add other to their friend List -> (Add Friend)
             user.friends.push(friendId);
+            isFriend = true;
             // friend.friends.push(id);
         }
         await user.save();
@@ -99,7 +102,7 @@ export const addRemoveFriend = async function (req, res) {           // follower
                 return { _id, firstName, lastName, occupation, location, picturePath };
             }
         );
-        return res.status(200).json(formattedFriends);
+        return res.status(200).json({formattedFriends, isFriend});
 
 
     } catch (err) {
