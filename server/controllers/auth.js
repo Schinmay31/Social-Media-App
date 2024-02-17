@@ -1,32 +1,32 @@
 import passport from "../config/passportConfig.js";
 import { User } from '../model/User.js';
+import  jwt  from "jsonwebtoken";
 
-
+const secretKey  = "12345678"
+const generateToken = (user) => {
+    // Create a JWT token with user information
+    return jwt.sign({  userName: user.userName }, secretKey, { expiresIn: '4h' });
+};
 
 //  register user
 export const register = async function (req, res) {
     try {
         const {
             userName,
-            firstName,
-            lastName,
             email,
-            picturePath,
-            friends,
-            location,
-            occupation,
             password
         } = req.body;
 
         const newUser = new User({
             userName,
-            firstName,
-            lastName,
+            firstName : null,
+            lastName : null,
             email,
-            picturePath,
-            friends,
-            location,
-            occupation
+            picturePath : null,
+            friends : [],
+            location : null,
+            occupation : null,
+            
         });
 
 
@@ -35,7 +35,8 @@ export const register = async function (req, res) {
                 return res.status(500).json({ error: err.message });
             } else {
                 passport.authenticate("local")(req, res, function () {
-                    return res.status(201).json(user);
+                   const token =  generateToken(user)
+                    return res.status(201).json({user, token});
                 });
             }
 
@@ -61,7 +62,7 @@ export const login = async function (req, res) {
         req.login(currUser, function (err) {
             if (err) {
                 console.log(err);
-                return res.status(500).josn({ error: err.message });
+                return res.status(500).json({ error: err.message });
             }
             else {
                 passport.authenticate("local")(req, res, function () {
@@ -78,8 +79,10 @@ export const login = async function (req, res) {
                             occupation: req.user.occupation,
 
                         }
+
                     };
-                    return res.status(201).json(response);
+                    const token =  generateToken(currUser)
+                    return res.status(201).json({response,token});
                 });
             }
         });
@@ -87,3 +90,8 @@ export const login = async function (req, res) {
         res.status(500).json({ error: err.message });
     }
 } 
+export const verifyLogin = (req, res) => {
+    res.json({
+        user : req.user.userName
+    })
+}
