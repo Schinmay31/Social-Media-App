@@ -13,6 +13,8 @@ const router = express.Router();
 router.get("/",verifyToken,getFeedPosts);               //  main page feed 
 router.get("/:userId/posts",verifyUser,getUserPosts);  //  specific users feed
 
+router.post("/PostComment",verifyUser,)
+
 // update
 router.patch("/:id/like",verifyToken,likePost);     // when you like/unlike specific users post.
 

@@ -52,4 +52,8 @@ userSchema.plugin(passportLocalMongoose, {
     usernameField: 'userName'        // Specifing  that the "email" field should be treated as the username
 });
 
-export const User = mongoose.model('user', userSchema);
+ const User = mongoose.model('user', userSchema);
+ User.createCollection().then(function(collection){
+    console.log("collection creted");
+ });
+

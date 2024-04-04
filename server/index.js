@@ -16,6 +16,7 @@ import userRoutes from "./routes/users.js";
 import { verifyUser } from "./middleware/auth.js";
 import  {createPost} from './controllers/posts.js';
 import postsRoute from './routes/posts.js';
+import { User } from "./model/User.js";
 
 
 // Configrations
@@ -64,6 +65,9 @@ mongoose.connect(uri, { useNewUrlParser: true })
    .then(() => {
       console.log("Database is Connected ")
    });
+   User.createCollection().then(function (collection) { 
+      console.log('Collection is created!'); 
+  });
 
 
    //    routes with files 

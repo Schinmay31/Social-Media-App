@@ -84,5 +84,26 @@ export const likePost = async function (req, res) {
     } catch (err) {
       return res.status(404).json({ message: err.message });
     }
-  };
+  }
+
+  // export const postComments = async function(req,res){
+  //   try{
+  //     const { postId } = req.params;
+  //   const { text } = req.body;
+  //   // const userId = req.user.id; 
+
+  //   const post = await Post.findById(id);
+  
+  //   if (!post) {
+  //     return res.status(404).json({ message: 'Post not found' });
+  //   }
+    
+  //   const newComment = new Comment({
+  //     // user: userId,
+      
+  //     text,
+  //   });
+  // }
+  // }
+
   

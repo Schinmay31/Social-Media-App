@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 export const getUser = async function (req, res) {
     try {
         const { id } = req.query;
-        console.log('Received user ID:', id);
+        // console.log('Received user ID:', id);
 
         const user = await User.findById(id);
 
@@ -109,3 +109,9 @@ export const addRemoveFriend = async function (req, res) {           // follower
         return res.status(404).json({ message: err.message });
     }
 }
+
+
+
+
+
+
