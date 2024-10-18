@@ -10,12 +10,13 @@ https://documenter.getpostman.com/view/24753331/2s9YsJAXC3
 
 To get started with the SocialBee Backend API locally, follow these steps :
 - clone project locally
+- set up enviroment variables.
 - run 'npm install'
 - run 'npm start'
 
 ## Authentication and Security
 
--  data transmission using HTTP.
+- data transmission using HTTP.
 - Authentication and Autherization is done using passport.js
 - Rate limiting to prevent abuse.
 
